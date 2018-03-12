@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 const WEBVIEW_REF = 'webview';
 const TOOLBAR_REF = 'toolbar';
 
-export default class Main extends Component {
+export default class AwesomeBrowser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,10 +75,10 @@ export default class Main extends Component {
   }
 }
 
-Main.propTypes = {
+AwesomeBrowser.propTypes = {
   uri: PropTypes.string.isRequired,
 };
 
-Main.defaultProps = {
+AwesomeBrowser.defaultProps = {
   uri: 'https://google.com',
 };

@@ -14,42 +14,27 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const availableLibraries = {
-    ENTYPO                 : Entypo,
-    EVILICONS              : EvilIcons,
-    AWESOME                : FontAwesome,
-    FOUNDATION             : Foundation,
-    MATERIAL               : MaterialIcons,
-    MATERIAL_COMMUNITY     : MaterialCommunityIcons,
-    OCTICONS               : Octicons,
-    ZOCIAL                 : Zocial,
-    SIMPLE_LINE            : SimpleLineIcons,
-    ION_ICONS              : Ionicons,
-}  
+  ENTYPO: Entypo,
+  EVILICONS: EvilIcons,
+  AWESOME: FontAwesome,
+  FOUNDATION: Foundation,
+  MATERIAL: MaterialIcons,
+  MATERIAL_COMMUNITY: MaterialCommunityIcons,
+  OCTICONS: Octicons,
+  ZOCIAL: Zocial,
+  SIMPLE_LINE: SimpleLineIcons,
+  ION_ICONS: Ionicons,
+};
 
-export default class VectorIcon extends Component {      
- 
-    render() {
-
-        const { libraryName } = this.props
-        const Icon = availableLibraries[libraryName]
-        return (
-            <Icon name={ 
-                this.props.iconName } 
-                size={ this.props.size } 
-                color={ this.props.color }/>
-            );
-        }
-}
-
+const VectorIcon = ({ libraryName, iconName, size, color = '#000' }) => {
+  const { libraryName } = this.props;
+  const Icon = availableLibraries[libraryName];
+  return <Icon name={iconName} size={size} color={color} />;
+};
 
 VectorIcon.propTypes = {
-    libraryName: PropTypes.oneOf(...Object.keys(availableLibraries)),
-    iconName: PropTypes.string.isRequired,
-    size: PropTypes.number.isRequired,
-    color: PropTypes.string    
+  libraryName: PropTypes.oneOf(...Object.keys(availableLibraries)),
+  iconName: PropTypes.string.isRequired,
+  size: PropTypes.number.isRequired,
+  color: PropTypes.string,
 };
-
-VectorIcon.defaultProps = {
-    color: '#000'
-};
-  

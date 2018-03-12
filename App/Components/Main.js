@@ -15,33 +15,77 @@ const styles = StyleSheet.create({
         backgroundColor: '#F6F6EF',
         flexDirection: 'column'
       },
-    toolbar: {        
-        height: 44,
-    },
     webView: {
         flex:1
     }
 })
+const WEBVIEW_REF = 'webview';
+const TOOLBAR_REF = 'toolbar';
 
 export default class Main extends Component {    
+    constructor(props) {
+        super(props);
+        this.state = {
+            canGoBack: false,
+            canGoForward: false,
+            };        
+      }
+
+    reloadWebView() {
+        this.refs[WEBVIEW_REF].reload();
+    }
+    onBack() {
+        this.refs[WEBVIEW_REF].goBack();
+      }
+
+    onForward() {
+        this.refs[WEBVIEW_REF].goForward();
+    }
+
+    onNavigationStateChange(navState) {
+        this.setState({
+          canGoBack: navState.canGoBack,
+          canGoForward: navState.canGoForward
+          
+        });
+      }
+
     render() {
-        const statusBarHidden = true        
+        const statusBarHidden = true     
+        console.log(this.state.canGoBack)
+        
       return (
         <View style={styles.container}>
           
                 <StatusBar
-                backgroundColor="blue"
-                barStyle="dark-content"
-                hidden={statusBarHidden}
+                    backgroundColor="blue"
+                    barStyle="dark-content"
+                    hidden={statusBarHidden}
                 />
-                
-                <Toolbar height={44} />
+
+                <Toolbar 
+                    canGoBack={ this.state.canGoBack}
+                    canGoForward={ this.state.canGoForward}
+                    goWebViewBack= {this.onBack}
+                    goWebViewForward= {this.onForward}
+                    goWebViewRefresh= {this.reloadWebView}
+                    uri= { this.props.uri }/>
                 <WebView
-                source={{uri: 'https://google.com'}}
-                style={ styles.webView }
+                    ref={WEBVIEW_REF}
+                    source={{ uri: this.props.uri }}
+                    onNavigationStateChange={this.onNavigationStateChange.bind(this)}
+                    style={ styles.webView }
                 />
             </View>
       );
     }
-  }    
+}
+
+Main.propTypes = {
+    uri: PropTypes.string.isRequired,  
+};
   
+Main.defaultProps = {
+    uri: 'https://google.com'
+};
+

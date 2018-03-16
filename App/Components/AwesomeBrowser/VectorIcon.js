@@ -27,7 +27,6 @@ const availableLibraries = {
 };
 
 const VectorIcon = ({ libraryName, iconName, size, color = '#000' }) => {
-  const { libraryName } = this.props;
   const Icon = availableLibraries[libraryName];
   return <Icon name={iconName} size={size} color={color} />;
 };
@@ -38,3 +37,5 @@ VectorIcon.propTypes = {
   size: PropTypes.number.isRequired,
   color: PropTypes.string,
 };
+
+export default VectorIcon;

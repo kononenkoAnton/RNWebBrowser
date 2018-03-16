@@ -1,4 +1,6 @@
 import { AppRegistry } from 'react-native';
-import Main from './App/Components/Main';
+import AwesomeBrowser from './App/Components/AwesomeBrowser';
 
-AppRegistry.registerComponent('APWebBrowser', () => Main);
+const App = () => <AwesomeBrowser />;
+
+AppRegistry.registerComponent('APWebBrowserDemo', () => App);

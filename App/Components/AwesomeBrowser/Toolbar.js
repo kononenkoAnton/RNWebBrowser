@@ -1,7 +1,3 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import VectorIcon from './VectorIcon';
-
 import {
   View,
   Button,
@@ -10,6 +6,10 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { VectorIcon } from './VectorIcon';
 
 const styles = StyleSheet.create({
   container: {
@@ -57,7 +57,7 @@ export default class Toolbar extends Component {
   }
 
   urlInputPresentation() {
-    if (this.props.allowUrlInput == true) {
+    if (this.props.allowUrlInput === true) {
       const { textURL } = this.state;
 
       return (
@@ -66,22 +66,21 @@ export default class Toolbar extends Component {
           style={styles.textInput}
           placeholder="Type to enter URL"
           value={textURL}
-          onChangeText={textURL => this.setState({ textURL })}
+          onChangeText={textURLString => this.setState({ textURLString })}
         />
       );
-    } else {
-      return (
-        <View style={styles.searchContainer}>
-          <VectorIcon libraryName={'EVILICONS'} iconName={'lock'} size={25} />
-          <Text style={styles.textURL} numberOfLines={1}>
-            {this.props.uri}
-          </Text>
-        </View>
-      );
     }
+    return (
+      <View style={styles.searchContainer}>
+        <VectorIcon libraryName={'EVILICONS'} iconName={'lock'} size={25} />
+        <Text style={styles.textURL} numberOfLines={1}>
+          {this.props.uri}
+        </Text>
+      </View>
+    );
   }
   shareButtonPresentation() {
-    if (this.props.shareButtonEnabled == true) {
+    if (this.props.shareButtonEnabled === true) {
       return (
         <TouchableOpacity style={styles.moreButton}>
           <VectorIcon
@@ -92,12 +91,11 @@ export default class Toolbar extends Component {
           />
         </TouchableOpacity>
       );
-    } else {
-      return;
-    }
+    } 
+    return;    
   }
   presentReloadButton() {
-    if (this.props.allowUrlInput == false) {
+    if (this.props.allowUrlInput === false) {
       return (
         <TouchableOpacity style={styles.refreshButton}>
           <VectorIcon
@@ -108,12 +106,11 @@ export default class Toolbar extends Component {
           />
         </TouchableOpacity>
       );
-    } else {
-    }
+    } 
   }
   render() {
     const { height } = this.props;
-    const paddingLeft = this.props.allowUrlInput == true ? 10 : 0;
+    const paddingLeft = this.props.allowUrlInput === true ? 10 : 0;
     const customStyles = {
       height,
       paddingLeft,
@@ -126,7 +123,8 @@ export default class Toolbar extends Component {
         <TouchableOpacity
           onPress={this.props.goWebViewBack}
           style={styles.moreButton}
-          activeOpacity={this.state.canGoForward ? 0.2 : 1}>
+          activeOpacity={this.state.canGoForward ? 0.2 : 1}
+        >
           <VectorIcon
             libraryName={'ION_ICONS'}
             iconName={'ios-arrow-back'}
@@ -136,7 +134,8 @@ export default class Toolbar extends Component {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.moreButton}
-          activeOpacity={this.state.canGoForward ? 0.2 : 1}>
+          activeOpacity={this.state.canGoForward ? 0.2 : 1}
+        >
           <VectorIcon
             libraryName={'ION_ICONS'}
             iconName={'ios-arrow-forward'}
@@ -148,8 +147,9 @@ export default class Toolbar extends Component {
         <View
           style={[
             styles.searchContainer,
-            { height: this.props.height / 100 * 70 },
-          ]}>
+            { height: ((this.props.height / 100) * 70) },
+          ]}
+        >
           {this.urlInputPresentation()}
         </View>
         {this.presentReloadButton()}

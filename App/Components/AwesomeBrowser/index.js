@@ -1,8 +1,7 @@
+import { View, WebView, StyleSheet, StatusBar } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toolbar from './Toolbar';
-
-import { View, WebView, StyleSheet, StatusBar } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +14,6 @@ const styles = StyleSheet.create({
   },
 });
 const WEBVIEW_REF = 'webview';
-const TOOLBAR_REF = 'toolbar';
 
 export default class AwesomeBrowser extends Component {
   constructor(props) {
@@ -25,24 +23,6 @@ export default class AwesomeBrowser extends Component {
       canGoForward: false,
     };
   }
-
-  reloadWebView = () => {
-    this.refs[WEBVIEW_REF].reload();
-  };
-  onBack = () => {
-    this.refs[WEBVIEW_REF].goBack();
-  };
-
-  onForward = () => {
-    this.refs[WEBVIEW_REF].goForward();
-  };
-
-  onNavigationStateChange = navState => {
-    this.setState({
-      canGoBack: navState.canGoBack,
-      canGoForward: navState.canGoForward,
-    });
-  };
 
   render() {
     const statusBarHidden = true;
@@ -74,6 +54,24 @@ export default class AwesomeBrowser extends Component {
     );
   }
 }
+
+reloadWebView = () => {
+  this.refs[WEBVIEW_REF].reload();
+};
+onBack = () => {
+  this.refs[WEBVIEW_REF].goBack();
+};
+
+onForward = () => {
+  this.refs[WEBVIEW_REF].goForward();
+};
+
+onNavigationStateChange = navState => {
+  this.setState({
+    canGoBack: navState.canGoBack,
+    canGoForward: navState.canGoForward,
+  });
+};
 
 AwesomeBrowser.propTypes = {
   uri: PropTypes.string.isRequired,

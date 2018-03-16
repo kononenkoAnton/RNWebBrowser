@@ -2,6 +2,7 @@ import { View, WebView, StyleSheet, StatusBar } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toolbar from './Toolbar';
+import { checkValidUrl } from '../../Utils/Helpers';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,12 +22,44 @@ export default class AwesomeBrowser extends Component {
     this.state = {
       canGoBack: false,
       canGoForward: false,
+      url: this.props.url,
+      utlToPresent: this.props.url,
     };
   }
 
+  onBack = () => {
+    if (this.state.canGoBack === true) {
+      this.refs[WEBVIEW_REF].goBack();
+    }
+  };
+
+  onForward = () => {
+    if (this.state.canGoForward === true) {
+      this.refs[WEBVIEW_REF].goForward();
+    }
+  };
+
+  onNavigationStateChange = navState => {
+    this.setState({
+      canGoBack: navState.canGoBack,
+      canGoForward: navState.canGoForward,
+    });
+  };
+  
+  reloadWebView = (url) => {
+    if (url) {
+      const newURL = checkValidUrl(url);
+      this.setState({
+        urlToPresent: url,
+        url: newURL
+      });
+    } else {
+      this.refs[WEBVIEW_REF].reload();
+    }
+  };
+
   render() {
     const statusBarHidden = true;
-    console.log(this.state.canGoBack);
 
     return (
       <View style={styles.container}>
@@ -39,14 +72,14 @@ export default class AwesomeBrowser extends Component {
         <Toolbar
           canGoBack={this.state.canGoBack}
           canGoForward={this.state.canGoForward}
-          goWebViewBack={this.onBack}
-          goWebViewForward={this.onForward}
-          goWebViewRefresh={this.reloadWebView}
-          uri={this.props.uri}
+          onWebViewBack={this.onBack}
+          onWebViewForward={this.onForward}
+          onWebViewReload={this.reloadWebView}
+          url={this.state.utlToPresent}
         />
         <WebView
           ref={WEBVIEW_REF}
-          source={{ uri: this.props.uri }}
+          source={{ uri: this.state.url }}
           onNavigationStateChange={this.onNavigationStateChange}
           style={styles.webView}
         />
@@ -55,28 +88,10 @@ export default class AwesomeBrowser extends Component {
   }
 }
 
-reloadWebView = () => {
-  this.refs[WEBVIEW_REF].reload();
-};
-onBack = () => {
-  this.refs[WEBVIEW_REF].goBack();
-};
-
-onForward = () => {
-  this.refs[WEBVIEW_REF].goForward();
-};
-
-onNavigationStateChange = navState => {
-  this.setState({
-    canGoBack: navState.canGoBack,
-    canGoForward: navState.canGoForward,
-  });
-};
-
 AwesomeBrowser.propTypes = {
-  uri: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
 AwesomeBrowser.defaultProps = {
-  uri: 'https://google.com',
+  url: 'https://google.com',
 };

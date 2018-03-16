@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 export default class Toolbar extends Component {
   constructor(props) {
     super(props);
-    this.state = { textURL: props.uri };
+    this.state = { textURL: props.url };
   }
 
   urlInputPresentation() {
@@ -66,7 +66,11 @@ export default class Toolbar extends Component {
           style={styles.textInput}
           placeholder="Type to enter URL"
           value={textURL}
-          onChangeText={textURLString => this.setState({ textURLString })}
+          onChangeText={textURLString => this.setState({ textURL: textURLString })}
+          returnKeyType="done"
+          clearButtonMode="while-editing"
+          onSubmitEditing={() => this.props.onWebViewReload(this.state.textURL)}
+          autoCapitalize={'none'}
         />
       );
     }
@@ -74,7 +78,7 @@ export default class Toolbar extends Component {
       <View style={styles.searchContainer}>
         <VectorIcon libraryName={'EVILICONS'} iconName={'lock'} size={25} />
         <Text style={styles.textURL} numberOfLines={1}>
-          {this.props.uri}
+          {this.props.url}
         </Text>
       </View>
     );
@@ -97,7 +101,10 @@ export default class Toolbar extends Component {
   presentReloadButton() {
     if (this.props.allowUrlInput === false) {
       return (
-        <TouchableOpacity style={styles.refreshButton}>
+        <TouchableOpacity 
+        style={styles.refreshButton}
+          onPress={() => this.props.onWebViewReload()}
+        >
           <VectorIcon
             libraryName={'ION_ICONS'}
             iconName={'ios-refresh'}
@@ -115,7 +122,6 @@ export default class Toolbar extends Component {
       height,
       paddingLeft,
     };
-    console.log(this.state.canGoBack);
     return (
       <View style={[styles.container, customStyles]}>
         {this.shareButtonPresentation()}
@@ -123,24 +129,30 @@ export default class Toolbar extends Component {
         <TouchableOpacity
           onPress={this.props.goWebViewBack}
           style={styles.moreButton}
-          activeOpacity={this.state.canGoForward ? 0.2 : 1}
+          activeOpacity={this.props.canGoForward ? 0.2 : 1}
+          onPress={
+            this.props.onWebViewBack
+          }
         >
           <VectorIcon
             libraryName={'ION_ICONS'}
             iconName={'ios-arrow-back'}
             size={30}
-            color={this.state.canGoBack ? '#007AFF' : '#d3d3d3'}
+            color={this.props.canGoBack ? '#007AFF' : '#d3d3d3'}
           />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.moreButton}
-          activeOpacity={this.state.canGoForward ? 0.2 : 1}
+          activeOpacity={this.props.canGoForward ? 0.2 : 1}
+          onPress={
+            this.props.onWebViewForward
+          }
         >
           <VectorIcon
             libraryName={'ION_ICONS'}
             iconName={'ios-arrow-forward'}
             size={30}
-            color={this.state.canGoForward ? '#007AFF' : '#d3d3d3'}
+            color={this.props.canGoForward ? '#007AFF' : '#d3d3d3'}
           />
         </TouchableOpacity>
 
@@ -150,7 +162,7 @@ export default class Toolbar extends Component {
             { height: ((this.props.height / 100) * 70) },
           ]}
         >
-          {this.urlInputPresentation()}
+        {this.urlInputPresentation()}
         </View>
         {this.presentReloadButton()}
 
@@ -161,14 +173,19 @@ export default class Toolbar extends Component {
 }
 
 Toolbar.propTypes = {
-  uri: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   shareButtonEnabled: PropTypes.bool,
   allowUrlInput: PropTypes.bool,
   height: PropTypes.number,
+  canGoForward: PropTypes.bool.isRequired,
+  canGoBack: PropTypes.bool.isRequired,
+  onWebViewForward: PropTypes.func.isRequired,
+  onWebViewBack: PropTypes.func.isRequired,
+  onWebViewReload: PropTypes.func.isRequired
 };
 
 Toolbar.defaultProps = {
-  allowUrlInput: false,
+  allowUrlInput: true,
   shareButtonEnabled: true,
   height: 44,
 };

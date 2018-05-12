@@ -70,6 +70,8 @@ class Toolbar extends Component {
 
 const styles = StyleSheet.create({
     container: {
+        borderBottomColor: 'darkgray',
+        borderBottomWidth: 1,
         backgroundColor: '#F6F6EF',
         flexDirection: 'row',
         alignItems: 'center',    

@@ -26,5 +26,5 @@ const availableLibraries = {
 
 export const VectorIcon = ({ libraryName, iconName, size, color = '#000' }) => {
   const Icon = availableLibraries[libraryName];
-  return <Icon name={iconName} size={size} color={color} />;
+  return <Icon name={iconName} size={size} color={color}/>;
 };

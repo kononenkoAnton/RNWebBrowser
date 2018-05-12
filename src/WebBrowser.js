@@ -1,9 +1,10 @@
-import { View, WebView, StyleSheet, StatusBar } from 'react-native';
+import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { webUrlUpdated, webViewCanGoBack } from './Redux/Actions';
+import { webUrlUpdated, webViewCanGoBack, webViewCanGoForward } from './Redux/Actions';
 import Toolbar from './Components/Toolbar';
+import BottomToolBar from './Components/BottomToolBar';
 import MoreOptionsModal from './Components/MoreOptionsModal';
 import { checkValidUrl } from './Utils/Helpers';
 
@@ -23,14 +24,29 @@ class WebBrowser extends Component {
     
   };
 
-  onWebViewBack() {
+  onWebViewBack = () => {
     if (this.props.canGoBack === true) {
       this.refs[WEBVIEW_REF].goBack();
     }
   }
 
+  onWebViewForward = () => {
+    if (this.props.canGoForward === true) {
+      this.refs[WEBVIEW_REF].goForward();
+    }
+  }
+
+  onCopyURL = () => {
+    //TODO copy url
+    Clipboard.setString(this.props.urlString);
+    console.log('Clipboard');
+    const content = Clipboard.getString();
+    console.log(content);
+  }
+
   onNavigationStateChange = navState => {
     this.props.webViewCanGoBack(navState.canGoBack);
+    this.props.webViewCanGoForward(navState.canGoForward);
   };
   
   onWebViewReload = () => {
@@ -50,6 +66,10 @@ class WebBrowser extends Component {
     this.setState({
       isMoreOptionsModalVisible: false,
     });
+  }
+
+  onOpenExternalURL = () => {
+    Linking.openURL(this.props.urlString);
   }
 
   moreOptionsModalPresentation() {
@@ -88,6 +108,12 @@ class WebBrowser extends Component {
           onNavigationStateChange={this.onNavigationStateChange}
           style={styles.webView}
         />
+        <BottomToolBar 
+          onWebViewBack={this.onWebViewBack}
+          onWebViewForward={this.onWebViewForward}
+          onCopyURL={this.onCopyURL}
+          onOpenExternalURL={this.onOpenExternalURL}
+        />
        {this.moreOptionsModalPresentation()}
       </View>
     );
@@ -114,12 +140,13 @@ WebBrowser.defaultProps = {
 };
 
 const mapStateToProps = ({ webView }) => {
-  const { urlString, canGoBack } = webView;
+  const { urlString, canGoBack, canGoForward } = webView;
 
-  return { urlString, canGoBack };
+  return { urlString, canGoBack, canGoForward };
 };
 
 export default connect(mapStateToProps, {
   webUrlUpdated,
   webViewCanGoBack,
+  webViewCanGoForward,
 })(WebBrowser);

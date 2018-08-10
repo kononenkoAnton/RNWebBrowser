@@ -1,18 +1,16 @@
-import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking, Animated, PanResponder, Text } from 'react-native';
+import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking, Animated, PanResponder, Share } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { webUrlUpdated, webViewCanGoBack, webViewCanGoForward } from './Redux/Actions';
 import Toolbar from './Components/Toolbar';
 import BottomToolBar from './Components/BottomToolBar';
-import MoreOptionsModal from './Components/MoreOptionsModal';
 import { checkValidUrl } from './Utils/Helpers';
 
 const WEBVIEW_REF = 'webview';
 
 class WebBrowser extends Component {
   state = {
-    isMoreOptionsModalVisible: false,
     fade: new Animated.Value(44)
   }
 
@@ -68,18 +66,12 @@ class WebBrowser extends Component {
     this.refs[WEBVIEW_REF].reload();
   };
 
-  onMoreButtonDidPush = () => {
-    console.log('onMoreButtonDidPush');
-
-    //TODO: Add Modal View 
-    this.setState({
-      isMoreOptionsModalVisible: true
-    });
-  }
-
-  onModalScreenClose = () => {
-    this.setState({
-      isMoreOptionsModalVisible: false,
+  onShareButtonDidPush = () => {
+    console.log('onShareButtonDidPush');
+    Share.share({
+      message: 'Wow, have you seen that?',
+      url: this.props.urlString,
+      title: 'Wow, have you seen that?'
     });
   }
 
@@ -97,30 +89,17 @@ class WebBrowser extends Component {
     ).start();
   }
 
-  moreOptionsModalPresentation() {
-
-    if (this.state.isMoreOptionsModalVisible) {
-      return (
-        <MoreOptionsModal
-          onWebViewBack={this.onWebViewBack}
-          onModalScreenClose={this.onModalScreenClose}
-        />
-      );
-    }
-    return;
-  }
-
   render() {
     const statusBarHidden = true;
     const HEADER_MAX_HEIGHT = 200;
     const HEADER_MIN_HEIGHT = 60;
     const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-    // const headerHeight = this.state.scrollY.interpolate({
-    //   inputRange: [0, HEADER_SCROLL_DISTANCE],
-    //   outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
-    //   extrapolate: 'clamp',
-    // });
+    const headerHeight = this.state.scrollY.interpolate({
+      inputRange: [0, HEADER_SCROLL_DISTANCE],
+      outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+      extrapolate: 'clamp',
+    });
     return (
       <View 
         style={styles.container}  
@@ -135,7 +114,7 @@ class WebBrowser extends Component {
         <Toolbar
           onBack={this.onBack}
           onWebViewReload={this.onWebViewReload}
-          onMoreButtonDidPush={this.onMoreButtonDidPush}
+          onShareButtonDidPush={this.onShareButtonDidPush}
         />
 
         {/* <Animated.View style={[styles.header, { height: headerHeight }]}>
@@ -155,7 +134,6 @@ class WebBrowser extends Component {
           onCopyURL={this.onCopyURL}
           onOpenExternalURL={this.onOpenExternalURL}
         />
-       {this.moreOptionsModalPresentation()}
       </View>
     );
   }

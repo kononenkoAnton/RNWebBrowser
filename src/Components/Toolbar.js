@@ -11,21 +11,21 @@ import BrowserView from './BrowserView';
 import { Button } from './common';
 
 class Toolbar extends Component {
-    onMoreButtonDidPush = () => {
+    onShareButtonDidPush = () => {
         //TODO Remove future anitmation here
-        this.props.onMoreButtonDidPush();
+        this.props.onShareButtonDidPush();
     }
     
-    moreButtonPresentation() {
+    shareButtonPresentation() {
         return (
             <Button 
                 style={styles.moreButton}
-                onPress={this.onMoreButtonDidPush}
+                onPress={this.onShareButtonDidPush}
             >
                 
                 <VectorIcon
-                    libraryName={'ENTYPO'}
-                    iconName={'dots-three-vertical'}
+                    libraryName={'EVILICONS'}
+                    iconName={'share-apple'}
                     size={30}
                     color={'#007AFF'}
                 />
@@ -62,7 +62,7 @@ class Toolbar extends Component {
                     backgroundColor='blue'
                     onWebViewReload={this.props.onWebViewReload}
                 />
-                {this.moreButtonPresentation()}
+                {this.shareButtonPresentation()}
             </View>
         );
     }
@@ -87,7 +87,7 @@ Toolbar.propTypes = {
     height: PropTypes.number,
     onBack: PropTypes.func.isRequired,
     onWebViewReload: PropTypes.func.isRequired,
-    onMoreButtonDidPush: PropTypes.func.isRequired,
+    onShareButtonDidPush: PropTypes.func.isRequired,
 };
 
 Toolbar.defaultProps = {

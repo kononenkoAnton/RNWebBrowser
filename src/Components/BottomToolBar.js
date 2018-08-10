@@ -85,7 +85,7 @@ class BottomToolBar extends Component {
         const customStyles = {
             height,
         };
-        const { container} = styles;
+        const { container } = styles;
         return (
             <View style={[container, customStyles]}>
                 {this.backButtonPresentation()}

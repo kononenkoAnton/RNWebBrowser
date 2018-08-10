@@ -1,4 +1,4 @@
-import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking } from 'react-native';
+import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking, Animated, PanResponder, Text } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -12,11 +12,28 @@ const WEBVIEW_REF = 'webview';
 
 class WebBrowser extends Component {
   state = {
-    isMoreOptionsModalVisible: false
+    isMoreOptionsModalVisible: false,
+    fade: new Animated.Value(44)
   }
 
   componentWillMount() {
     this.props.webUrlUpdated(this.props.url);
+    this.startAnimation();
+
+    this.panResponder = PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+
+      onPanResponderMove: (evt, gestureState) => {
+        // console.log(`onPanResponderMove ${-gestureState.dy}`);
+        this.setState({
+          scrollY: new Animated.Value(-gestureState.dy)
+        });
+      },
+
+      onPanResponderRelease: () => {
+        console.log('onPanResponderRelease');
+      }
+    });
   }
 
   onBack = () => {
@@ -39,9 +56,7 @@ class WebBrowser extends Component {
   onCopyURL = () => {
     //TODO copy url
     Clipboard.setString(this.props.urlString);
-    console.log('Clipboard');
     const content = Clipboard.getString();
-    console.log(content);
   }
 
   onNavigationStateChange = navState => {
@@ -72,8 +87,17 @@ class WebBrowser extends Component {
     Linking.openURL(this.props.urlString);
   }
 
+  startAnimation() {
+    Animated.timing(
+      this.state.fade,
+      {
+        toValue: 0,
+        duration: 2000,
+      }
+    ).start();
+  }
+
   moreOptionsModalPresentation() {
-    console.log(this.state.isMoreOptionsModalVisible);
 
     if (this.state.isMoreOptionsModalVisible) {
       return (
@@ -88,8 +112,20 @@ class WebBrowser extends Component {
 
   render() {
     const statusBarHidden = true;
+    const HEADER_MAX_HEIGHT = 200;
+    const HEADER_MIN_HEIGHT = 60;
+    const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
+
+    // const headerHeight = this.state.scrollY.interpolate({
+    //   inputRange: [0, HEADER_SCROLL_DISTANCE],
+    //   outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    //   extrapolate: 'clamp',
+    // });
     return (
-      <View style={styles.container}>
+      <View 
+        style={styles.container}  
+        // {...this.panResponder.panHandlers}       
+      >
         <StatusBar
           backgroundColor="blue"
           barStyle="dark-content"
@@ -102,6 +138,11 @@ class WebBrowser extends Component {
           onMoreButtonDidPush={this.onMoreButtonDidPush}
         />
 
+        {/* <Animated.View style={[styles.header, { height: headerHeight }]}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Title</Text>
+          </View>
+        </Animated.View> */}
         <WebView
           ref={WEBVIEW_REF}
           source={{ uri: this.props.urlString }}
@@ -128,6 +169,27 @@ const styles = StyleSheet.create({
   },
   webView: {
     flex: 1,
+  },
+
+  header: {
+    // position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 200,
+    backgroundColor: '#03A9F4',
+    // overflow: 'hidden',
+  },
+  bar: {
+    marginTop: 28,
+    height: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 18,
   },
 });
 

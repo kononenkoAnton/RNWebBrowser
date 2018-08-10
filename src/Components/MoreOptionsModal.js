@@ -3,7 +3,6 @@ import {
     Modal,
     StyleSheet,
     Animated,
-    Easing,
     PanResponder,
 } from 'react-native';
 
@@ -24,10 +23,10 @@ class MoreOptionsModal extends Component {
             onMoveShouldSetPanResponder: () => true,
 
             onPanResponderMove: (evt, gestureState) => {
+                console.log(gestureState);
                 this.calculateNewOpacity(gestureState);
             },
             onPanResponderRelease: () => {
-                console.log(`onPanResponderRelease ${this.state.fadeAnim._value}`);
                 if (this.state.readyToClose === true || this.state.fadeAnim._value < 0.4) {
                     this.onScreenClose();
                 } else {
@@ -44,7 +43,6 @@ class MoreOptionsModal extends Component {
 
     onScreenClose = () => {
         this.startAnimation(() => this.props.onModalScreenClose());
-        console.log('onScreenClose');
     }
 
     revertAnimation(completion) {
@@ -67,13 +65,16 @@ class MoreOptionsModal extends Component {
     }
 
     calculateNewOpacity(gestureState) {
+        console.log(gestureState.moveY);
+
         if (gestureState.moveY > 0) {
             const value = (1 - (-gestureState.dy / 200));
             let newOpacity = Math.round(value * 100) / 100;
             let readyToClose = this.state.readyToClose;
+            console.log(newOpacity);
+
             if (newOpacity > 0.0 && this.state.readyToClose === false) {
                 if (newOpacity < 0.05) {
-                    console.log('readyToClose');
                     newOpacity = 0;
                     readyToClose = true;
                 }

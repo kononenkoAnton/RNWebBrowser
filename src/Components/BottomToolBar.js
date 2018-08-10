@@ -21,7 +21,7 @@ class BottomToolBar extends Component {
                 <VectorIcon
                     libraryName={'AWESOME'}
                     iconName={'caret-left'}
-                    size={40}
+                    size={20}
                     color={this.props.canGoBack ? 'grey' : 'lightgray'}
                 />
             </Button>
@@ -39,7 +39,7 @@ class BottomToolBar extends Component {
                 <VectorIcon
                     libraryName={'AWESOME'}
                     iconName={'caret-right'}
-                    size={40}
+                    size={20}
                     color={this.props.canGoForward ? 'grey' : 'lightgray'}
                 />
             </Button>
@@ -56,7 +56,7 @@ class BottomToolBar extends Component {
                 <VectorIcon
                     libraryName={'AWESOME'}
                     iconName={'copy'}
-                    size={30}
+                    size={20}
                     color={'grey'}
                 />
             </Button>
@@ -73,24 +73,23 @@ class BottomToolBar extends Component {
                 <VectorIcon
                     libraryName={'AWESOME'}
                     iconName={'safari'}
-                    size={30}
+                    size={20}
                     color={'grey'}
                 />
             </Button>
         );
     }
-    
+
     render() {
         const { height } = this.props;
         const customStyles = {
             height,
         };
-        const { container, dummyView } = styles;
+        const { container} = styles;
         return (
             <View style={[container, customStyles]}>
                 {this.backButtonPresentation()}
                 {this.forwardButtonPresentation()}
-                {/* <View style={dummyView} /> */}
                 {this.copyURLButtonPresentation()}
                 {this.safariButtonPresentation()}
             </View>
@@ -109,9 +108,6 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 20,
     },
-    dymmyView: {
-        width: 35,
-    }
 });
 
 BottomToolBar.propTypes = {

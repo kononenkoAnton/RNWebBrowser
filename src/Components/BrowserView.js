@@ -30,7 +30,10 @@ class BrowserView extends Component {
         return (
             <View style={newContainerStyles}> 
                 <View style={urlPlaceholderContainer}>
-                    <VectorIcon libraryName={'EVILICONS'} iconName={'lock'} size={25} />
+                    <VectorIcon
+                        libraryName={'EVILICONS'} 
+                        iconName={'lock'} size={25}
+                    />
                     <Text 
                         numberOfLines={1}
                         style={textUrl}

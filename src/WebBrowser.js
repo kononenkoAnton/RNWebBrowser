@@ -95,15 +95,9 @@ class WebBrowser extends Component {
     const HEADER_MIN_HEIGHT = 60;
     const HEADER_SCROLL_DISTANCE = HEADER_MAX_HEIGHT - HEADER_MIN_HEIGHT;
 
-    const headerHeight = this.state.scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
-      extrapolate: 'clamp',
-    });
     return (
       <View 
         style={styles.container}  
-        // {...this.panResponder.panHandlers}       
       >
         <StatusBar
           backgroundColor="blue"
@@ -116,12 +110,6 @@ class WebBrowser extends Component {
           onWebViewReload={this.onWebViewReload}
           onShareButtonDidPush={this.onShareButtonDidPush}
         />
-
-        {/* <Animated.View style={[styles.header, { height: headerHeight }]}>
-          <View style={styles.header}>
-            <Text style={styles.title}>Title</Text>
-          </View>
-        </Animated.View> */}
         <WebView
           ref={WEBVIEW_REF}
           source={{ uri: this.props.urlString }}

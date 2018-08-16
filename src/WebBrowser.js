@@ -1,4 +1,4 @@
-import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking, Animated, PanResponder, Share } from 'react-native';
+import { View, WebView, StyleSheet, StatusBar, Clipboard, Linking, Animated, PanResponder, Share, Platform } from 'react-native';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,28 +10,8 @@ import { checkValidUrl } from './Utils/Helpers';
 const WEBVIEW_REF = 'webview';
 
 class WebBrowser extends Component {
-  state = {
-    fade: new Animated.Value(44)
-  }
-
   componentWillMount() {
     this.props.webUrlUpdated(this.props.url);
-    this.startAnimation();
-
-    this.panResponder = PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-
-      onPanResponderMove: (evt, gestureState) => {
-        // console.log(`onPanResponderMove ${-gestureState.dy}`);
-        this.setState({
-          scrollY: new Animated.Value(-gestureState.dy)
-        });
-      },
-
-      onPanResponderRelease: () => {
-        console.log('onPanResponderRelease');
-      }
-    });
   }
 
   onBack = () => {

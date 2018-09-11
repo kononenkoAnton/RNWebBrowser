@@ -1,132 +1,128 @@
-import {
-    View,
-    StyleSheet,
-} from 'react-native';
+import { View, StyleSheet } from "react-native";
 
-import { connect } from 'react-redux';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { VectorIcon } from './VectorIcon';
-import { Button } from './common';
+import { connect } from "react-redux";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { VectorIcon } from "./VectorIcon";
+import { Button } from "./common";
 
 class BottomToolBar extends Component {
-    backButtonPresentation() {
-        return (
-            <Button
-                style={styles.moreButton}
-                onPress={this.props.onWebViewBack}
-                activeOpacity={this.props.canGoBack ? 0.2 : 1}
-            >
+  backButtonPresentation() {
+    return (
+      <Button
+        style={styles.moreButton}
+        onPress={this.props.onWebViewBack}
+        activeOpacity={this.props.canGoBack ? 0.2 : 1}
+      >
+        <VectorIcon
+          libraryName={"AWESOME"}
+          iconName={"caret-left"}
+          size={20}
+          color={this.props.canGoBack ? "grey" : "lightgray"}
+        />
+      </Button>
+    );
+  }
 
-                <VectorIcon
-                    libraryName={'AWESOME'}
-                    iconName={'caret-left'}
-                    size={20}
-                    color={this.props.canGoBack ? 'grey' : 'lightgray'}
-                />
-            </Button>
-        );
-    }
+  forwardButtonPresentation() {
+    return (
+      <Button
+        style={styles.moreButton}
+        onPress={this.props.onWebViewForward}
+        activeOpacity={this.props.canGoForward ? 0.2 : 1}
+      >
+        <VectorIcon
+          libraryName={"AWESOME"}
+          iconName={"caret-right"}
+          size={20}
+          color={this.props.canGoForward ? "grey" : "lightgray"}
+        />
+      </Button>
+    );
+  }
 
-    forwardButtonPresentation() {
-        return (
-            <Button
-                style={styles.moreButton}
-                onPress={this.props.onWebViewForward}
-                activeOpacity={this.props.canGoForward ? 0.2 : 1}
-            >
+  copyURLButtonPresentation() {
+    return (
+      <Button style={styles.moreButton} onPress={this.props.onCopyURL}>
+        <VectorIcon
+          libraryName={"AWESOME"}
+          iconName={"copy"}
+          size={20}
+          color={"grey"}
+        />
+      </Button>
+    );
+  }
 
-                <VectorIcon
-                    libraryName={'AWESOME'}
-                    iconName={'caret-right'}
-                    size={20}
-                    color={this.props.canGoForward ? 'grey' : 'lightgray'}
-                />
-            </Button>
-        );
-    }
+  safariButtonPresentation() {
+    return (
+      <Button style={styles.moreButton} onPress={this.props.onOpenExternalURL}>
+        <VectorIcon
+          libraryName={"AWESOME"}
+          iconName={"safari"}
+          size={20}
+          color={"grey"}
+        />
+      </Button>
+    );
+  }
 
-    copyURLButtonPresentation() {
-        return (
-            <Button
-                style={styles.moreButton}
-                onPress={this.props.onCopyURL}
-            >
+  render() {
+    const { height, styles } = this.props;
+    // this.props.styles contains the styles from the extra_props
 
-                <VectorIcon
-                    libraryName={'AWESOME'}
-                    iconName={'copy'}
-                    size={20}
-                    color={'grey'}
-                />
-            </Button>
-        );
-    }
+    const customStyles = {
+      height
+    };
+    const { container } = getStyles(styles);
 
-    safariButtonPresentation() {
-        return (
-            <Button
-                style={styles.moreButton}
-                onPress={this.props.onOpenExternalURL}
-            >
-
-                <VectorIcon
-                    libraryName={'AWESOME'}
-                    iconName={'safari'}
-                    size={20}
-                    color={'grey'}
-                />
-            </Button>
-        );
-    }
-
-    render() {
-        const { height } = this.props;
-        const customStyles = {
-            height,
-        };
-        const { container } = styles;
-        return (
-            <View style={[container, customStyles]}>
-                {this.backButtonPresentation()}
-                {this.forwardButtonPresentation()}
-                {this.copyURLButtonPresentation()}
-                {this.safariButtonPresentation()}
-            </View>
-        );
-    }
+    return (
+      <View style={[container, customStyles]}>
+        {this.backButtonPresentation()}
+        {this.forwardButtonPresentation()}
+        {this.copyURLButtonPresentation()}
+        {this.safariButtonPresentation()}
+      </View>
+    );
+  }
 }
 
-const styles = StyleSheet.create({
+function getStyles(styles) {
+  return StyleSheet.create({
     container: {
-        borderTopColor: 'darkgray',
-        borderTopWidth: 1,
-        backgroundColor: '#F6F6EF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-});
+      borderTopColor: styles.borderTopColor,
+      borderTopWidth: 1,
+      backgroundColor: styles.backgroundColor,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      paddingLeft: 20,
+      paddingRight: 20
+    }
+  });
+}
 
 BottomToolBar.propTypes = {
-    height: PropTypes.number,
-    onWebViewBack: PropTypes.func.isRequired,
-    onWebViewForward: PropTypes.func.isRequired,
-    onCopyURL: PropTypes.func.isRequired,
-    onOpenExternalURL: PropTypes.func.isRequired,
+  height: PropTypes.number,
+  onWebViewBack: PropTypes.func.isRequired,
+  onWebViewForward: PropTypes.func.isRequired,
+  onCopyURL: PropTypes.func.isRequired,
+  onOpenExternalURL: PropTypes.func.isRequired,
+  styles: PropTypes.object
 };
 
 BottomToolBar.defaultProps = {
-    allowUrlInput: false,
-    height: 44,
+  allowUrlInput: false,
+  height: 44
 };
 
-const mapStateToProps = ({ webView }) => {
-    const { urlString, canGoBack, canGoForward } = webView;
+const mapStateToProps = ({ webView, styles }) => {
+  const { urlString, canGoBack, canGoForward } = webView;
 
-    return { urlString, canGoBack, canGoForward };
+  return { urlString, canGoBack, canGoForward, styles };
 };
 
-export default connect(mapStateToProps, {})(BottomToolBar);
+export default connect(
+  mapStateToProps,
+  {}
+)(BottomToolBar);
